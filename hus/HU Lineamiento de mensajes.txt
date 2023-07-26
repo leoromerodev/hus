@@ -1,0 +1,32 @@
+Historia de Usuario: Gestión de Lineamientos de Diseño de Mensajes en la Aplicación Angular
+
+Como arquitecto de software,
+Deseo establecer lineamientos claros para la forma, frecuencia, duración y diseño gráfico de los mensajes que muestra nuestra aplicación web desarrollada en Angular,
+Con el fin de mantener una experiencia de usuario consistente, agradable y efectiva.
+
+Criterios de Aceptación:
+1. Definir los lineamientos para los mensajes al usuario, especificando el tono y estilo de redacción que se utilizará en diferentes situaciones (por ejemplo, mensajes de éxito, error, advertencia e información).
+2. Establecer la frecuencia adecuada de los mensajes emergentes (pop-ups) y notificaciones, evitando la sobrecarga de información para el usuario.
+3. Limitar la duración de los mensajes emergentes para evitar interrupciones prolongadas en la experiencia del usuario y garantizar que los mensajes sean eficientes y efectivos.
+4. Proporcionar una guía de diseño gráfico para los mensajes, incluyendo colores, iconografía y disposición de elementos, de acuerdo con la identidad de marca de la aplicación.
+5. Identificar y mejorar aquellos componentes de la aplicación que actualmente no cumplen con los lineamientos de diseño de mensajes establecidos.
+6. Proponer mejoras para los componentes existentes o diseñar nuevos componentes que reflejen adecuadamente los lineamientos de diseño de mensajes.
+7. Asegurar que los mensajes al usuario sean localizables y puedan adaptarse a diferentes idiomas y culturas según las necesidades de la aplicación.
+8. Documentar los lineamientos de diseño de mensajes y las mejoras propuestas para su revisión y aprobación por parte del equipo de desarrollo y diseño.
+
+Sugerencias para Mejorar los Componentes de Mensajes:
+1. Utilizar componentes reutilizables para mostrar mensajes coherentes y reducir la duplicación de código.
+2. Implementar animaciones suaves y no intrusivas para mostrar y ocultar los mensajes emergentes.
+3. Permitir al usuario cerrar los mensajes emergentes manualmente si es relevante y necesario.
+4. Proporcionar una forma de retroalimentación para los mensajes informativos o de éxito, como un ícono de "Terminado" o una opción de "Proceso terminado satisfactoriamente".
+5. Utilizar colores y símbolos apropiados para denotar el tipo de mensaje (por ejemplo, verde para mensajes de éxito y rojo para mensajes de error).
+6. Adaptar el tamaño y la posición de los mensajes emergentes para que sean visibles pero no obstruyan la interacción con la aplicación.
+
+Referencias Técnicas:
+1. Angular Material Snackbar Component: [https://material.angular.io/components/snack-bar/overview](https://material.angular.io/components/snack-bar/overview)
+2. Bootstrap Alert Component: [https://getbootstrap.com/docs/5.1/components/alerts/](https://getbootstrap.com/docs/5.1/components/alerts/)
+
+Notas adicionales:
+- Los lineamientos de diseño de mensajes deben ser discutidos y acordados con el equipo de diseño para asegurar la coherencia con el estilo general de la aplicación.
+- Es importante realizar pruebas de usabilidad con usuarios reales para validar la efectividad y la aceptación de los mensajes rediseñados.
+- Se alienta al equipo de desarrollo a buscar constantemente mejoras y feedback de los usuarios para mantener una experiencia de usuario de alta calidad.
