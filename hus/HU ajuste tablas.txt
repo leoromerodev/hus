@@ -1,0 +1,36 @@
+Historia de Usuario: Personalización de la Paginación, Filtros y Formulario de Búsqueda
+
+Como arquitecto de software líder del proyecto web, necesitamos permitir que los usuarios personalicen la forma en que interactúan con los datos en la aplicación. Para lograr esto, debemos implementar la funcionalidad de personalización de la paginación, filtros y formulario de búsqueda. A continuación, se presentan los criterios de aceptación para esta historia de usuario, junto con referencias a la documentación técnica relevante para guiar al desarrollador en el proceso de modificación del front-end en Angular con Bootstrap.
+
+**Criterios de Aceptación:**
+1. **Paginación Personalizada:**
+   - El usuario debe poder seleccionar el número de elementos a mostrar por página desde una lista desplegable.
+   - La paginación debe actualizarse dinámicamente al cambiar la cantidad de elementos por página.
+   - Asegurar que el número total de elementos sea dividido adecuadamente en las páginas.
+
+2. **Filtros Personalizados:**
+   - El usuario debe poder agregar, editar y eliminar filtros para refinar la visualización de los datos en la tabla.
+   - Los filtros deben aplicarse en tiempo real y actualizarse automáticamente al agregar o eliminar filtros.
+   - Los filtros deben ser aplicados en combinación (AND) para refinar la búsqueda de manera efectiva.
+
+3. **Formulario de Búsqueda Personalizado:**
+   - El usuario debe tener acceso a un formulario de búsqueda que le permita buscar datos específicos en la tabla.
+   - La búsqueda debe ser sensible a mayúsculas y minúsculas, y proporcionar resultados relevantes.
+
+4. **Persistencia de Configuraciones:**
+   - Las configuraciones personalizadas de paginación y filtros deben persistir entre sesiones para que los usuarios encuentren la misma vista personalizada al regresar a la aplicación.
+
+**Documentación Técnica de Referencia:**
+1. **Angular:**
+   - Para la implementación de la paginación, el desarrollador puede utilizar el módulo `MatPaginator` de Angular Material. Aquí está la [documentación oficial](https://material.angular.io/components/paginator/overview) para obtener detalles sobre su uso.
+
+2. **Bootstrap:**
+   - El desarrollo de la interfaz de usuario se basa en Bootstrap. El desarrollador puede utilizar los componentes y clases de Bootstrap para crear filtros y formularios de búsqueda con un diseño coherente y atractivo. Se puede consultar la [documentación oficial de Bootstrap](https://getbootstrap.com/docs/5.0/getting-started/introduction/) para obtener información sobre la utilización de sus componentes y estilos.
+
+3. **Angular Reactive Forms:**
+   - Para implementar el formulario de búsqueda, el desarrollador puede utilizar Reactive Forms de Angular. La [documentación oficial de Angular Reactive Forms](https://angular.io/guide/reactive-forms) proporciona una guía detallada sobre cómo crear y gestionar formularios reactivos.
+
+4. **Persistencia de Configuraciones:**
+   - Para lograr la persistencia de las configuraciones personalizadas, se puede utilizar el almacenamiento local del navegador mediante el objeto `localStorage` en JavaScript. La [documentación de MDN web docs sobre localStorage](https://developer.mozilla.org/es/docs/Web/API/Window/localStorage) explica cómo utilizar esta característica.
+
+Con esta información, el desarrollador estará bien equipado para llevar a cabo la modificación del front-end en Angular con Bootstrap y permitir que los usuarios personalicen la paginación, filtros y formulario de búsqueda según sus necesidades y preferencias.

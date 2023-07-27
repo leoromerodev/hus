@@ -1,0 +1,33 @@
+Historia de Usuario: Exportación de Información desde el Front-End en Formatos Excel y PDF
+
+Como arquitecto de software líder del proyecto web basado en microservicios, necesitamos habilitar la capacidad de exportar información desde el front-end en formatos de Excel y PDF. Los usuarios deben poder exportar datos de tablas en la aplicación y también tener la posibilidad de modificar fácilmente los archivos PDF generados mediante plantillas. A continuación, se presentan los criterios de aceptación para esta historia de usuario, junto con referencias a la documentación técnica relevante para guiar al desarrollador en el proceso de modificación del front-end en Angular con Bootstrap.
+
+**Criterios de Aceptación:**
+1. **Exportación de Datos a Excel:**
+   - El usuario debe tener la opción de exportar los datos mostrados en una tabla en formato Excel (.xlsx).
+   - El archivo Excel debe incluir todas las columnas y filas visibles en la tabla, con los datos correspondientes.
+   - Los datos exportados deben mantener el formato y estilos aplicados en la tabla original, incluyendo estilos personalizados, colores y alineaciones.
+
+2. **Exportación de Datos a PDF:**
+   - El usuario debe poder exportar los datos de una tabla en formato PDF.
+   - El archivo PDF debe incluir todas las columnas y filas visibles en la tabla, con los datos correspondientes.
+   - Se deben proporcionar opciones para personalizar la apariencia del archivo PDF, como ajustar el tamaño de papel, orientación y márgenes.
+
+3. **Modificación de Archivos PDF mediante Plantillas:**
+   - La aplicación debe permitir definir plantillas PDF personalizadas que se utilizarán para la generación de archivos PDF exportados.
+   - Las plantillas deben ser fáciles de modificar, permitiendo la incorporación de logotipos de la empresa, información adicional y diseños específicos.
+
+**Documentación Técnica de Referencia:**
+1. **Angular Export to Excel:**
+   - El desarrollador puede utilizar la librería "ngx-export-as" para facilitar la exportación de datos a Excel. Aquí está la [documentación oficial](https://www.npmjs.com/package/ngx-export-as) de la librería, donde encontrará ejemplos y detalles sobre cómo usarla para exportar datos a Excel.
+
+2. **Angular Export to PDF:**
+   - Para habilitar la exportación de datos a PDF, se puede emplear la librería "pdfmake" junto con "ngx-export-as". La primera librería permite definir plantillas personalizadas para los archivos PDF. Aquí está la [documentación oficial de pdfmake](https://pdfmake.github.io/docs/) para conocer cómo crear plantillas PDF y personalizar la generación de archivos.
+
+3. **Angular PDF Viewer:**
+   - Si se requiere mostrar una vista previa del archivo PDF antes de exportarlo, el desarrollador puede utilizar la librería "ngx-extended-pdf-viewer". La [documentación oficial](https://www.npmjs.com/package/ngx-extended-pdf-viewer) proporciona información sobre cómo implementar un visor de PDF en la aplicación Angular.
+
+4. **Angular Bootstrap Modals:**
+   - Es recomendable utilizar modales de Bootstrap para proporcionar una interfaz de usuario clara y amigable para que los usuarios puedan seleccionar las opciones de exportación y personalización de los archivos. La [documentación oficial de Bootstrap modals](https://getbootstrap.com/docs/5.0/components/modal/) ofrece detalles sobre cómo implementarlos en la aplicación.
+
+Con esta información, el desarrollador estará bien preparado para modificar el front-end en Angular con Bootstrap y permitir que los usuarios exporten información de tablas a archivos de Excel y PDF, además de personalizar fácilmente los archivos PDF mediante plantillas definidas en la aplicación.
