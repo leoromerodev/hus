@@ -1,44 +1,61 @@
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+namespace RestClientExample
 {
-  "version": "2.0.0",
-  "tasks": [
+    class Program
     {
-      "label": "Ejecutar microservicios",
-      "type": "shell",
-      "command": "npm",
-      "args": [
-        "run",
-        "microservicio1"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "group": "build"
-    },
-    {
-      "label": "Ejecutar microservicios",
-      "type": "shell",
-      "command": "npm",
-      "args": [
-        "run",
-        "microservicio2"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "group": "build"
-    },
-    {
-      "label": "Ejecutar microservicios",
-      "type": "shell",
-      "command": "npm",
-      "args": [
-        "run",
-        "microservicio3"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "group": "build"
+        static async Task Main(string[] args)
+        {
+            // URL del endpoint al que queremos enviar la solicitud POST
+            string apiUrl = "https://ejemplo.com/api/endpoint";
+
+            // Crear un objeto DTO para mapear los datos JSON
+            MyDto dto = new MyDto
+            {
+                Clave = "valor"
+            };
+
+            // Serializar el objeto DTO a JSON
+            string jsonData = JsonConvert.SerializeObject(dto);
+
+            // Crear una instancia del cliente HttpClient
+            using (HttpClient client = new HttpClient())
+            {
+                // Convertir el objeto JSON en un contenido HttpContent
+                HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    // Enviar la solicitud POST al API REST
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                    // Verificar si la solicitud fue exitosa
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Leer la respuesta del API
+                        string responseData = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Respuesta del API: " + responseData);
+                    }
+                    else
+                    {
+                        Console.WriteLine("La solicitud no fue exitosa. Código de estado: " + response.StatusCode);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al enviar la solicitud: " + ex.Message);
+                }
+            }
+        }
     }
-  ]
+
+    // Definir la clase DTO
+    public class MyDto
+    {
+        public string Clave { get; set; }
+    }
 }
