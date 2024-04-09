@@ -1,60 +1,53 @@
 param(
-    [string]$rutaProyecto = "ruta/al/proyecto",
-    [string]$ramasAuxiliaresBackup = "ruta/para/guardar/backups",
-    [int]$mesesAtras = 2
+    [string]$rutaProyecto = "C:\miProyecto", # Actualiza esto con la ruta real de tu proyecto
+    [string]$ramasAuxiliaresBackup = "C:\backupRamas", # Actualiza esto con la ruta real para los backups
+    [string]$fechaCorte = "2024-02-01", # Ajusta esta fecha segÃºn necesites
+    [string]$ramaDev = "DEV",
+    [string]$ramaRelease = "release/UAT",
+    [string]$ramaMaster = "master"
 )
 
-# Función para realizar el backup de las ramas auxiliares
-function BackupRamasAuxiliares {
-    foreach ($rama in $ramasAuxiliares) {
-        $backupPath = Join-Path $ramasAuxiliaresBackup $rama
-        git checkout -b $ramaBackup $rama
-        git push origin $ramaBackup
-        git checkout $rama
+# Convertir la fechaCorte a un objeto DateTime para comparaciones
+$fechaCorte = [datetime]::ParseExact($fechaCorte, "yyyy-MM-dd", $null)
+
+# Cambiar al directorio del proyecto
+Set-Location -Path $rutaProyecto
+
+# Asegurar que tenemos la Ãºltima informaciÃ³n del remoto
+git fetch --prune
+
+# Listar todas las ramas remotas y sus fechas de creaciÃ³n, excluyendo las ramas protegidas
+$ramasAuxiliares = git for-each-ref --format='%(refname:short) %(creatordate:short)' refs/remotes/origin |
+    Where-Object {
+        $_ -match "origin/.*/.*" -and
+        $_ -notmatch "origin/$ramaDev" -and
+        $_ -notmatch "origin/$ramaRelease" -and
+        $_ -notmatch "origin/$ramaMaster"
     }
-}
 
-# Función para eliminar las ramas auxiliares
-function EliminarRamasAuxiliares {
-    foreach ($rama in $ramasAuxiliares) {
-        git branch -d $rama
+foreach ($linea in $ramasAuxiliares) {
+    $parts = $linea -split ' ', 2
+    $rama = $parts[0] -replace 'origin/', ''
+    $fechaRama = [datetime]::ParseExact($parts[1], "yyyy-MM-dd", $null)
+
+    if ($fechaRama -lt $fechaCorte) {
+        # Verificar si la rama ya estÃ¡ fusionada con dev
+        $isMerged = git branch -r --merged $ramaDev | Select-String -Pattern "\b$rama\b"
+
+        if ($isMerged) {
+            Write-Host "La rama $rama estÃ¡ fusionada en $ramaDev y fue creada antes de $fechaCorte. Realizando backup..."
+            # Crear backup de la rama
+            $ramaBackup = "$rama-backup"
+            git checkout -b $ramaBackup origin/$rama
+            git push origin $ramaBackup
+            git checkout $ramaDev
+
+            # Eliminar la rama remota
+            Write-Host "Eliminando rama $rama..."
+            git push origin --delete $rama
+        }
+        else {
+            Write-Host "La rama $rama no estÃ¡ fusionada con $ramaDev. Se omite."
+        }
     }
-}
-
-# Función para hacer rollback de las ramas auxiliares
-function RollbackRamasAuxiliares {
-    foreach ($rama in $ramasAuxiliares) {
-        git checkout $ramaBackup
-        git push --force origin $rama
-        git checkout dev
-    }
-}
-
-# Obtenemos la lista de ramas auxiliares
-$ramasAuxiliares = git branch --list "*/*" | ForEach-Object { $_ -replace "^\s*", "" }
-
-# Verificamos si cada rama auxiliar está fusionada en la rama dev
-foreach ($rama in $ramasAuxiliares) {
-    $mergeBase = git merge-base dev $rama
-    $fechaMergeBase = git show -s --format=%ci $mergeBase
-    $fechaLimite = (Get-Date).AddMonths(-$mesesAtras)
-    
-    if ($fechaMergeBase -lt $fechaLimite) {
-        Write-Host "La rama $rama está fusionada en dev y se fusionó antes de $fechaLimite"
-        BackupRamasAuxiliares
-        EliminarRamasAuxiliares
-    }
-}
-
-# Generamos el log
-Get-Date | Out-File -FilePath "ruta/para/guardar/log.txt" -Append
-
-# Opción de rollback
-$rollback = Read-Host "¿Deseas hacer rollback de las ramas auxiliares eliminadas? (Sí/No)"
-
-if ($rollback.ToLower() -eq "sí") {
-    RollbackRamasAuxiliares
-    Write-Host "Rollback completado."
-} else {
-    Write-Host "No se realizó rollback."
 }
