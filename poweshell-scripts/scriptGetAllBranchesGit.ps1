@@ -20,7 +20,7 @@ $encabezado | Out-File -FilePath $rutaCompleta -Encoding UTF8
 
 
 # Imprimir encabezado
-Write-Output "Contador | Fecha de Creación | Último Commit | Autor | Descripción | Nombre de la Rama | Rama Base"
+Write-Output "Contador | Fecha de Creacion | Ultimo Commit | Autor | Descripcion | Nombre de la Rama | Rama Base"
 Write-Output "--------------------------------------------------------------------------------------------------------"
 
 # Obtener todas las ramas locales y remotas, excluyendo las especificadas
