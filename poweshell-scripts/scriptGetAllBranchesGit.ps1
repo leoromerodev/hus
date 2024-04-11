@@ -1,6 +1,6 @@
 param (
-    # Directorio del repositorio de Git
-    [string]$RutaRepositorio,
+    # Directorio del repositorio de Git, predeterminado a la ubicación actual del script
+    [string]$RutaRepositorio = (Get-Location).Path,
     
     # Directorio para guardar el archivo CSV
     [string]$Directorio = "C:\ramas",
@@ -30,15 +30,18 @@ Write-Output "Cambiando al directorio del repositorio: $RutaRepositorio"
 # Verificar y crear el directorio del CSV si no existe
 CrearDirectorioSiNoExiste -path $Directorio
 
-# Nombre del archivo CSV con formato AAAAMMDDhhmmss.csv
-$nombreArchivo = $NombreBaseArchivo + (Get-Date).ToString("yyyyMMddHHmmss") + ".csv"
+# Extraer el nombre del último directorio de la ruta del repositorio
+$nombreRepositorio = Split-Path -Path $RutaRepositorio -Leaf
+
+# Nombre del archivo CSV con formato NombreRepositorio_AAAAMMDDhhmmss.csv
+$nombreArchivo = $NombreBaseArchivo + $nombreRepositorio + "_" + (Get-Date).ToString("yyyyMMddHHmmss") + ".csv"
 $rutaCompleta = Join-Path -Path $Directorio -ChildPath $nombreArchivo
 
 # Imprimir encabezado
 $encabezado = "Contador, Fecha de Creación, Último Commit, Autor, Descripción, Nombre de la Rama, Rama Base"
 $encabezado | Out-File -FilePath $rutaCompleta -Encoding UTF8
 Write-Output "Encabezado escrito en: $rutaCompleta"
-Write-Output $encabezado
+
 # Patrón regex para las ramas a excluir
 $exclusionPattern = "^(" + ($ExcluirRamas -join '|') + ")$"
 
@@ -71,7 +74,7 @@ foreach ($rama in $ramas) {
 
     # Añadir la línea al archivo CSV
     $linea | Out-File -FilePath $rutaCompleta -Encoding UTF8 -Append
-    Write-Output $linea
+    Write-Output "Añadido: $linea"
 
     # Incrementar el contador
     $contador++
