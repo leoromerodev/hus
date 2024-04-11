@@ -1,30 +1,49 @@
-# Definir las ramas a excluir
-$excluirRama1 = "DEV"
-$excluirRama2 = "release/COB"
-$excluirRama3 = "SIT"
-$excluirRama4 = "release/UAT"
-$excluirRama5 = "master"
-# Directorio donde se guardará el archivo CSV
-$directorio = "C:\ramas"
+param (
+    # Directorio del repositorio de Git
+    [string]$RutaRepositorio,
+    
+    # Directorio para guardar el archivo CSV
+    [string]$Directorio = "C:\ramas",
+    
+    # Array de ramas a excluir
+    [string[]]$ExcluirRamas = @("DEV", "release/COB", "SIT", "release/UAT", "master"),
+    
+    # Nombre base del archivo CSV
+    [string]$NombreBaseArchivo = "ramas_"
+)
 
-# Verificar si el directorio existe, si no existe, crearlo
-if (-not (Test-Path $directorio)) {
-    New-Item -ItemType Directory -Path $directorio | Out-Null
+# Función para crear el directorio si no existe
+function CrearDirectorioSiNoExiste {
+    param (
+        [string]$path
+    )
+    if (-not (Test-Path $path)) {
+        New-Item -ItemType Directory -Path $path | Out-Null
+        Write-Output "Directorio creado: $path"
+    }
 }
 
+# Cambiar al directorio del repositorio
+Push-Location $RutaRepositorio
+Write-Output "Cambiando al directorio del repositorio: $RutaRepositorio"
+
+# Verificar y crear el directorio del CSV si no existe
+CrearDirectorioSiNoExiste -path $Directorio
+
 # Nombre del archivo CSV con formato AAAAMMDDhhmmss.csv
-$nombreArchivo = "ramas_" + (Get-Date).ToString("yyyyMMddHHmmss") + ".csv"
-$rutaCompleta = Join-Path -Path $directorio -ChildPath $nombreArchivo
-
-$encabezado | Out-File -FilePath $rutaCompleta -Encoding UTF8
-
+$nombreArchivo = $NombreBaseArchivo + (Get-Date).ToString("yyyyMMddHHmmss") + ".csv"
+$rutaCompleta = Join-Path -Path $Directorio -ChildPath $nombreArchivo
 
 # Imprimir encabezado
-Write-Output "Contador | Fecha de Creacion | Ultimo Commit | Autor | Descripcion | Nombre de la Rama | Rama Base"
-Write-Output "--------------------------------------------------------------------------------------------------------"
+$encabezado = "Contador, Fecha de Creación, Último Commit, Autor, Descripción, Nombre de la Rama, Rama Base"
+$encabezado | Out-File -FilePath $rutaCompleta -Encoding UTF8
+Write-Output "Encabezado escrito en: $rutaCompleta"
+Write-Output $encabezado
+# Patrón regex para las ramas a excluir
+$exclusionPattern = "^(" + ($ExcluirRamas -join '|') + ")$"
 
 # Obtener todas las ramas locales y remotas, excluyendo las especificadas
-$ramas = git branch --all --format="%(refname:short)" | ForEach-Object { $_.Trim() } | Where-Object { $_ -notmatch "^($excluirRama1|$excluirRama2|$excluirRama3|$excluirRama4|$excluirRama5)$" }
+$ramas = git branch --all --format="%(refname:short)" | ForEach-Object { $_.Trim() } | Where-Object { $_ -notmatch $exclusionPattern }
 
 # Inicializar contador
 $contador = 1
@@ -48,15 +67,17 @@ foreach ($rama in $ramas) {
     $ramaBase = git merge-base master $rama
 
     # Construir la línea CSV
-    $linea = "$contador, $fechaCreacion, $ultimoCommitFecha, $ultimoCommitAutor, $ultimoCommitDescripcion, $rama, $ramaBase"
+    $linea = "$contador, $fechaCreacion, $ultimoCommitFecha, `"$ultimoCommitAutor`", `"$ultimoCommitDescripcion`", `"$rama`", `"$ramaBase`""
 
     # Añadir la línea al archivo CSV
     $linea | Out-File -FilePath $rutaCompleta -Encoding UTF8 -Append
-
-    # Imprimir el contador y luego la información recolectada
-    Write-Output "$contador | $fechaCreacion | $ultimoCommitFecha | $ultimoCommitAutor | $ultimoCommitDescripcion | $rama | $ramaBase"
+    Write-Output $linea
 
     # Incrementar el contador
     $contador++
 }
+
+# Volver al directorio anterior
+Pop-Location
+
 Write-Output "El archivo CSV se ha guardado en: $rutaCompleta"
